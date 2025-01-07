@@ -13,12 +13,9 @@ concept:
 
 
 # items:
-- req min-length-[2] max-length-[2] length-[3] reg-[some_regex] 
+- req min-length-2 max-length-2 length-3 pattern-[some_regex] 
 - number letter illegal-[.,*]
 - ! to negate any of them
-
-
-
 
 
 # library should have:
@@ -28,3 +25,10 @@ concept:
 - support everyone (react, next, vanilla, vite, solid, svelte)
 - optional error massage span
 - error massage animate option
+
+# challanges to consider:
+
+- compatibility
+- performance (scanning the whole doc?)
+- error handling
+- simplicity and efficient
