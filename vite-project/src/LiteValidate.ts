@@ -1,5 +1,5 @@
-import messages from "./default-messages.json";
 import rules from "./default-rules.ts";
+type supportedTypes = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 const config = {
   TRIGGER_KEYWORD: "validate",
   ERROR_CLASSNAME: "validation-error",
@@ -17,50 +17,73 @@ function selectTargetElements() {
 export default function init() {
   let items = document.querySelectorAll(
     selectTargetElements(),
-  ) as NodeListOf<HTMLElement>;
+  ) as NodeListOf<supportedTypes>;
   SetValidationEvents(items);
 }
 
-export function SetValidationEvents(items: NodeListOf<HTMLElement>) {
+export function SetValidationEvents(items: NodeListOf<supportedTypes>) {
   items.forEach((i) => {
     setValidationEvent(i);
   });
 }
 
-function setValidationEvent(item: HTMLElement) {
+function setValidationEvent(item: supportedTypes) {
   item.addEventListener("blur", () => {
     validateItem(item);
   });
 }
 
-export function validateSection(section: HTMLElement) {
-  (
-    section.querySelectorAll(selectTargetElements()) as NodeListOf<HTMLElement>
-  ).forEach((i) => validateItem(i));
+export function validateSection(section: supportedTypes) {
+  (section.querySelectorAll(selectTargetElements()) as NodeListOf<supportedTypes>)
+    .forEach((i) => validateItem(i));
 }
 
-function validateItem(item: HTMLElement) {
+function validateItem(item: supportedTypes) {
   let success = true;
-  function checkErrorElement() {
-    if (item.nextElementSibling?.classList.contains(config.ERROR_CLASSNAME))
-      return;
-    let el = document.createElement("div");
-    el.classList.add(config.ERROR_CLASSNAME);
-    item.insertAdjacentElement("afterend", el);
+  let validations = findValidations(item);
+  if (validations.length == 0) return true;
+  for (const v of validations) {
+    let errorMsg = executeValidation(v, item)
+    console.log(errorMsg)
+    if (errorMsg !== "") success = false;
   }
-  function findValidations() {
-    return (item.dataset[config.TRIGGER_KEYWORD] || "").split(" ");
-  }
-  checkErrorElement();
-  let validations = findValidations();
-  if (validations.length == 0) return;
-  validations.forEach((v) => {
-    let read = rules[v];
-    if (!read) throw new Error(`No rule defined for "${v}".`);
-    let res = read(item.value);
-    if (res === false) success = false;
-  });
+  if (success === false) validationFailed(item);
   return success;
 }
 
-function validationFailed() { }
+function executeValidation(validationTag: string, element: supportedTypes): string {
+  let base = validationTag;
+  let arg: string | undefined;
+
+  if (validationTag.includes("-")) {
+    let split = validationTag.split("-");
+    base = split[0];
+    arg = split[1];
+    if (base === "" || arg === "") throw new Error(`Deformed validation tag: ${validationTag}`)
+  }
+
+  let rule = rules[base];
+  if (rule === undefined) throw new Error(`No rule defined for "${base}".`);
+  let ruleValidator = rule[0];
+  let result = ruleValidator(element.value, arg);
+  if (result === false) return rule[1]
+  return ""
+}
+
+function findValidations(item: supportedTypes) {
+  return (item.dataset[config.TRIGGER_KEYWORD] || "").trim().split(" ");
+}
+
+function validationFailed(item: supportedTypes) {
+  checkErrorElement(item);
+  const errorDisplay = item.nextElementSibling;
+  errorDisplay?.innerHTML
+}
+
+function checkErrorElement(item: supportedTypes) {
+  if (item.nextElementSibling?.classList.contains(config.ERROR_CLASSNAME))
+    return;
+  let el = document.createElement("div");
+  el.classList.add(config.ERROR_CLASSNAME);
+  item.insertAdjacentElement("afterend", el);
+}
