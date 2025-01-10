@@ -7,6 +7,7 @@ type ValidationRules = {
     priority: number
   }
 };
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const Rules: ValidationRules = {
   "required": {
     validator: (val: string) => val !== "",
@@ -48,6 +49,11 @@ const Rules: ValidationRules = {
     errorMessage: "Please do not use these characters: $",
     priority: 2
   },
+  "email": {
+    validator: (value) => EMAIL_REGEX.test(value),
+    errorMessage: "Email format not correct",
+    priority: 4
+  }
 };
 
 export default Rules;
