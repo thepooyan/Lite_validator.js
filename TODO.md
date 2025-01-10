@@ -1,4 +1,4 @@
+- negate
 - validate section should return result
 - create more default rules
 - create config file
-- support pattern
