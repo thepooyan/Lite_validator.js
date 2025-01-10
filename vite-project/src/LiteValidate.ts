@@ -1,6 +1,5 @@
 import rules from "./default-rules.ts";
 type supportedTypes = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
-type extendedTypes = supportedTypes & {errorMessages: string[]}
 const config = {
   TRIGGER_KEYWORD: "validate",
   ERROR_CLASSNAME: "validation-error",
@@ -39,27 +38,24 @@ export function validateSection(section: supportedTypes) {
     .forEach((i) => validateItem(i));
 }
 
-function extendElementWithErrorMsgs(element: supportedTypes):extendedTypes {
-  return {...element, errorMessages: []}
-}
-
+type errorDescription = {item:supportedTypes, msg: string, proirity: number}
 function validateItem(item: supportedTypes) {
   let success = true;
+  let errors: errorDescription[] = [];
   let validations = findValidations(item);
   if (validations.length == 0) return true;
-  let item2 = extendElementWithErrorMsgs(item)
   for (const v of validations) {
-    let errorMsg = executeValidation(v, item)
-    if (errorMsg !== "") {
+    let valiResult = executeValidation(v, item)
+    if (valiResult[0] !== "") {
       success = false;
-      item2.errorMessages.push(errorMsg)
+      errors.push({item, msg: valiResult[0], proirity: valiResult[1]})
     };
   }
-  if (success === false) validationFailed(item);
+  if (success === false) validationFailed(errors);
   return success;
 }
 
-function executeValidation(validationTag: string, element: supportedTypes): string {
+function executeValidation(validationTag: string, element: supportedTypes): [string, number] {
   let base = validationTag;
   let arg: string | undefined;
 
@@ -74,24 +70,27 @@ function executeValidation(validationTag: string, element: supportedTypes): stri
   if (rule === undefined) throw new Error(`No rule defined for "${base}".`);
 
   let result = rule.validator(element.value, arg);
-  if (result === false) return rule.errorMessage
-  return ""
+  if (result === false) return [rule.errorMessage, rule.priority]
+  return ["", 0]
 }
 
 function findValidations(item: supportedTypes) {
   return (item.dataset[config.TRIGGER_KEYWORD] || "").trim().split(" ");
 }
 
-function validationFailed(item: supportedTypes) {
-  checkErrorElement(item);
-  const errorDisplay = item.nextElementSibling;
-  errorDisplay?.innerHTML
+function validationFailed(errors: errorDescription[]) {
+  for (const err of errors) {
+    const errorDisplay = findErrorElement(err.item);
+    errorDisplay.innerHTML = err.msg
+  }
 }
 
-function checkErrorElement(item: supportedTypes) {
-  if (item.nextElementSibling?.classList.contains(config.ERROR_CLASSNAME))
-    return;
-  let el = document.createElement("div");
-  el.classList.add(config.ERROR_CLASSNAME);
-  item.insertAdjacentElement("afterend", el);
+function findErrorElement(item: supportedTypes) {
+  let element = item.nextElementSibling;
+  if (element !== null) {
+    if (element.classList.contains(config.ERROR_CLASSNAME))
+      return element;
+  }
+  console.log(item);
+  throw new Error(`above logged input has no validation box. please add an element with "${config.ERROR_CLASSNAME}" classname next to it!`)
 }
