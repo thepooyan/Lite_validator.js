@@ -85,8 +85,15 @@ function findValidations(item: supportedTypes) {
 
 function reflectValidation(item: supportedTypes,errors: errorDescription[]) {
   const errorDisplay = findErrorElement(item);
+  const errorClass = item.dataset.errorClass;
+  const successClass = item.dataset.successClass;
 
-  if (errors.length === 0) {errorDisplay.textContent = ""; return}
+  if (errors.length === 0) {
+    errorDisplay.textContent = "";
+    errorClass && item.classList.remove(errorClass)
+    successClass && item.classList.add(successClass)
+    return
+  }
 
   let highestPriority = errors.reduce((p, c) => p.proirity < c.proirity ? p : c).proirity;
   let targetErrors = errors.filter(i => i.proirity === highestPriority);
@@ -97,6 +104,8 @@ function reflectValidation(item: supportedTypes,errors: errorDescription[]) {
     else
     errorDisplay.textContent += config.CONCATER + err.msg
   })
+  errorClass && item.classList.add(errorClass)
+  successClass && item.classList.remove(successClass)
 }
 
 function findErrorElement(item: supportedTypes) {
