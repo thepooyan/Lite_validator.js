@@ -5,6 +5,8 @@
 - custom msg for pattern 
 - add: (filetype checker, select?)
 - if theres no msg box, dont show the error
+- dash in regex
+- default success and fail classname
 
 ```js
 "fileType": {

@@ -1,27 +1,73 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
-  <style>
-    .red {
-      background: red;
-    }
-    .green {
-      background: green;
-    }
-  </style>
-  <body id="ff">
-    <input type="email" placeholder="email" data-validate="minRange-4 maxRange-20 decimal" data-error-class="red" data-success-class="green">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite App</title>
+</head>
+<style>
+  .validation-error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+
+  .green {
+    border-color: lime;
+  }
+
+  .red {
+    border-color: red;
+  }
+
+  input,
+  textarea {
+    display: block;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    width: 100%;
+  }
+</style>
+
+<body>
+  <form id="validation-form">
+    <!-- Email Field -->
+    <input type="email" placeholder="email" data-validate="required email" data-error-class="red"
+      data-success-class="green" />
     <div class="validation-error"></div>
-    <input type="email" placeholder="number" data-validate="">
+
+    <!-- Number Field -->
+    <input type="text" placeholder="number" data-validate="number required minRange-100 maxRange-200"
+      data-error-class="red" data-success-class="green" />
     <div class="validation-error"></div>
-    <input type="email" placeholder="fn">
-    <textarea></textarea>
-    <script type="module" src="/src/main.ts"></script>
-    <button type="button" id="vv">validate</button>
-  </body>
+
+    <!-- Minimum Length Field -->
+    <input type="text" placeholder="minLength" data-validate="minLength-5" data-error-class="red"
+      data-success-class="green" />
+    <div class="validation-error"></div>
+
+    <!-- Pattern Field -->
+    <input type="text" placeholder="one or more 'a'" data-validate="pattern-[^a+$]" data-error-class="red"
+      data-success-class="green" />
+    <div class="validation-error"></div>
+
+    <!-- URL Field -->
+    <input type="url" placeholder="url" data-validate="url required" data-error-class="red"
+      data-success-class="green" />
+    <div class="validation-error"></div>
+
+    <!-- Illegal Characters Field -->
+    <input type="text" placeholder="type '@' here" data-validate="illegal-[$@^&]" data-error-class="red"
+      data-success-class="green" />
+    <div class="validation-error"></div>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>
