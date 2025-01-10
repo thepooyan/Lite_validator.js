@@ -85,6 +85,20 @@ const Rules: ValidationRules = {
     errorMessage: "This field must be a valid URL.",
     priority: 4,
   },
+  "creditCardExpiration": {
+    validator: (value) => {
+      const parts = value.split('/');
+      if (parts.length !== 2) return false;
+
+      const [month, year] = parts.map(Number);
+      const today = new Date();
+      const expirationDate = new Date(`20${year}-${month}-01`);
+
+      return expirationDate > today;
+    },
+    errorMessage: "This credit card has expired.",
+    priority: 4,
+  },
   "date": {
     validator: (value) => !isNaN(Date.parse(value)),
     errorMessage: "This field must be a valid date.",
