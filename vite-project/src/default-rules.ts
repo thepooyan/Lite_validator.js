@@ -8,16 +8,26 @@ type ValidationRules = {
   }
 };
 const Rules: ValidationRules = {
-  "req": {
+  "required": {
     validator: (val: string) => val !== "",
     errorMessage: "This field is required",
     priority: 1,
   },
-  "len": {
+  "length": {
     validator: (value, $) => $ ? value.length === parseInt($) : false,
     errorMessage: "This field should be $ characters long",
     priority: 3
   },
+  "minLength": {
+    validator: (value, $) => $ ? value.length >= parseInt($) : false,
+    errorMessage: "This field should be at least $ characters long",
+    priority: 3
+  },
+  "maxLength": {
+    validator: (value, $) => $ ? value.length <= parseInt($) : false,
+    errorMessage: "This field can't be more than $ characters long",
+    priority: 3
+  }
 };
 
 export default Rules;
