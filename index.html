@@ -33,7 +33,7 @@
 </style>
 
 <body>
-  <form id="validation-form">
+  <form id="mainform">
     <!-- Email Field -->
     <input type="email" placeholder="email" data-validate="required email" data-error-class="red"
       data-success-class="green" />
@@ -64,7 +64,7 @@
       data-success-class="green" />
     <div class="validation-error"></div>
 
-    <button type="submit">Submit</button>
+    <button type="button" id="subbutton">Submit</button>
   </form>
 
   <script type="module" src="/src/main.ts"></script>

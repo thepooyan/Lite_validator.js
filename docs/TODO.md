@@ -3,7 +3,7 @@
 - "no-error" "no-validation" classname
 - "show" and "hide" classname for error element
 - custom msg for pattern 
-- add: (filetype checker, select?)
+- add: (filetype checker, select?, nospace)
 - if theres no msg box, dont show the error
 - dash in regex
 - default success and fail classname
