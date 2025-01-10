@@ -31,8 +31,8 @@ const Rules: ValidationRules = {
     priority: 3,
   },
   "decimal": {
-    validator: (value) => /^[0-9.]+$/.test(value),
-    errorMessage: "Only numeric values are allowed in this field",
+    validator: (value) => /^[0-9]+(.[0-9]+)?$/.test(value),
+    errorMessage: "Only numeric values (with up to one decimal point) are allowed in this field",
     priority: 3,
   },
   "letter": {
