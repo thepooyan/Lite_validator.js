@@ -3,14 +3,6 @@ import config from "./lite-config.ts"
 
 type supportedTypes = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
-function selectTargetElements() {
-  let selection = ``;
-  for (let s of config.SUPPORTED_ELEMENTS) {
-    selection += `${s}[data-${config.TRIGGER_KEYWORD}],`;
-  }
-  return selection.substring(0, selection.length - 1);
-}
-
 export default function init() {
   let items = document.querySelectorAll(
     selectTargetElements(),
@@ -24,15 +16,23 @@ export function SetValidationEvents(items: NodeListOf<supportedTypes>) {
   });
 }
 
+export function validateSection(section: Element) {
+  (section.querySelectorAll(selectTargetElements()) as NodeListOf<supportedTypes>)
+    .forEach((i) => validateItem(i));
+}
+
+function selectTargetElements() {
+  let selection = ``;
+  for (let s of config.SUPPORTED_ELEMENTS) {
+    selection += `${s}[data-${config.TRIGGER_KEYWORD}],`;
+  }
+  return selection.substring(0, selection.length - 1);
+}
+
 function setValidationEvent(item: supportedTypes) {
   item.addEventListener("blur", () => {
     validateItem(item);
   });
-}
-
-export function validateSection(section: Element) {
-  (section.querySelectorAll(selectTargetElements()) as NodeListOf<supportedTypes>)
-    .forEach((i) => validateItem(i));
 }
 
 type errorDescription = {msg: string, proirity: number}
