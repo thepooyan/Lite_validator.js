@@ -33,12 +33,12 @@ function setValidationEvent(item: supportedTypes) {
   });
 }
 
-export function validateSection(section: supportedTypes) {
+export function validateSection(section: Element) {
   (section.querySelectorAll(selectTargetElements()) as NodeListOf<supportedTypes>)
     .forEach((i) => validateItem(i));
 }
 
-type errorDescription = {item:supportedTypes, msg: string, proirity: number}
+type errorDescription = {msg: string, proirity: number}
 function validateItem(item: supportedTypes) {
   let success = true;
   let errors: errorDescription[] = [];
@@ -48,10 +48,10 @@ function validateItem(item: supportedTypes) {
     let valiResult = executeValidation(v, item)
     if (valiResult[0] !== "") {
       success = false;
-      errors.push({item, msg: valiResult[0], proirity: valiResult[1]})
+      errors.push({msg: valiResult[0], proirity: valiResult[1]})
     };
   }
-  if (success === false) validationFailed(errors);
+  if (success === false) validationFailed(item, errors);
   return success;
 }
 
@@ -78,9 +78,10 @@ function findValidations(item: supportedTypes) {
   return (item.dataset[config.TRIGGER_KEYWORD] || "").trim().split(" ");
 }
 
-function validationFailed(errors: errorDescription[]) {
+function validationFailed(item: supportedTypes,errors: errorDescription[]) {
+  console.log(errors, item)
+  const errorDisplay = findErrorElement(item);
   for (const err of errors) {
-    const errorDisplay = findErrorElement(err.item);
     errorDisplay.innerHTML = err.msg
   }
 }
