@@ -1,5 +1,6 @@
 import rules from "./default-rules.ts";
 type supportedTypes = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+type extendedTypes = supportedTypes & {errorMessages: string[]}
 const config = {
   TRIGGER_KEYWORD: "validate",
   ERROR_CLASSNAME: "validation-error",
@@ -38,14 +39,21 @@ export function validateSection(section: supportedTypes) {
     .forEach((i) => validateItem(i));
 }
 
+function extendElementWithErrorMsgs(element: supportedTypes):extendedTypes {
+  return {...element, errorMessages: []}
+}
+
 function validateItem(item: supportedTypes) {
   let success = true;
   let validations = findValidations(item);
   if (validations.length == 0) return true;
+  let item2 = extendElementWithErrorMsgs(item)
   for (const v of validations) {
     let errorMsg = executeValidation(v, item)
-    console.log(errorMsg)
-    if (errorMsg !== "") success = false;
+    if (errorMsg !== "") {
+      success = false;
+      item2.errorMessages.push(errorMsg)
+    };
   }
   if (success === false) validationFailed(item);
   return success;
@@ -64,9 +72,9 @@ function executeValidation(validationTag: string, element: supportedTypes): stri
 
   let rule = rules[base];
   if (rule === undefined) throw new Error(`No rule defined for "${base}".`);
-  let ruleValidator = rule[0];
-  let result = ruleValidator(element.value, arg);
-  if (result === false) return rule[1]
+
+  let result = rule.validator(element.value, arg);
+  if (result === false) return rule.errorMessage
   return ""
 }
 
