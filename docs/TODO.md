@@ -7,6 +7,7 @@
 - if theres no msg box, dont show the error
 - dash in regex
 - default success and fail classname
+- there should be a way to only override the massage
 
 ```js
 "fileType": {
