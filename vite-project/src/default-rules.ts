@@ -12,37 +12,42 @@ type ValidationRules = {
 const Rules: ValidationRules = {
   "required": {
     validator: (val: string) => val !== "",
-    errorMessage: "This field cannot be left empty. Please provide a value.",
+    errorMessage: "This field cannot be left empty. Please provide a value",
     priority: 1,
   },
   "email": {
     validator: (value) => config.EMAIL_REGEX.test(value),
-    errorMessage: "Please provide a valid email address.",
+    errorMessage: "Please provide a valid email address",
     priority: 2,
   },
   "pattern": {
     validator: (value, $) => $ ? new RegExp($).test(value) : false,
-    errorMessage: "The value does not match the required format.",
+    errorMessage: "The value does not match the required format",
     priority: 2,
   },
   "number": {
     validator: (value) => /^[0-9]+$/.test(value),
-    errorMessage: "Only numeric values are allowed in this field.",
+    errorMessage: "Only numeric values are allowed in this field",
+    priority: 3,
+  },
+  "decimal": {
+    validator: (value) => /^[0-9.]+$/.test(value),
+    errorMessage: "Only numeric values are allowed in this field",
     priority: 3,
   },
   "letter": {
     validator: (value) => /^[a-zA-Z]+$/.test(value),
-    errorMessage: "Only alphabetic characters (A-Z, a-z) are allowed in this field.",
+    errorMessage: "Only alphabetic characters (A-Z, a-z) are allowed in this field",
     priority: 3,
   },
   "alphanumeric": {
     validator: (value) => /^[a-zA-Z0-9]+$/.test(value),
-    errorMessage: "This field must contain only letters and numbers.",
+    errorMessage: "This field must contain only letters and numbers",
     priority: 3,
   },
   "phoneNumber": {
     validator: (value) => config.PHONE_NUMBER_REGEX.test(value),
-    errorMessage: "This field must be a valid phone number.",
+    errorMessage: "This field must be a valid phone number",
     priority: 3,
   },
   "passwordStrength": {
@@ -56,17 +61,27 @@ const Rules: ValidationRules = {
   },
   "length": {
     validator: (value, $) => $ ? value.length === parseInt($) : false,
-    errorMessage: "This field must be exactly $ characters long.",
+    errorMessage: "This field must be exactly $ characters long",
     priority: 4,
   },
   "minLength": {
     validator: (value, $) => $ ? value.length >= parseInt($) : false,
-    errorMessage: "This field must be at least $ characters long.",
+    errorMessage: "This field must be at least $ characters long",
     priority: 4,
   },
   "maxLength": {
     validator: (value, $) => $ ? value.length <= parseInt($) : false,
-    errorMessage: "This field must not exceed $ characters in length.",
+    errorMessage: "This field must not exceed $ characters in length",
+    priority: 4,
+  },
+  "minRange": {
+    validator: (value, $) => $ ? parseFloat(value) >= parseFloat($) : false,
+    errorMessage: "This field must be at least $",
+    priority: 4,
+  },
+  "maxRange": {
+    validator: (value, $) => $ ? parseFloat(value) <= parseFloat($) : false,
+    errorMessage: "This field must not exceed $",
     priority: 4,
   },
   "url": {
@@ -78,7 +93,7 @@ const Rules: ValidationRules = {
         return false;
       }
     },
-    errorMessage: "This field must be a valid URL.",
+    errorMessage: "This field must be a valid URL",
     priority: 4,
   },
   "creditCardExpiration": {
@@ -92,12 +107,12 @@ const Rules: ValidationRules = {
 
       return expirationDate > today;
     },
-    errorMessage: "This credit card has expired.",
+    errorMessage: "This credit card has expired",
     priority: 4,
   },
   "date": {
     validator: (value) => !isNaN(Date.parse(value)),
-    errorMessage: "This field must be a valid date.",
+    errorMessage: "This field must be a valid date",
     priority: 4,
   },
   "creditCard": {
@@ -120,7 +135,7 @@ const Rules: ValidationRules = {
 
       return sum % 10 === 0;
     },
-    errorMessage: "This field must be a valid credit card number.",
+    errorMessage: "This field must be a valid credit card number",
     priority: 4,
   },
   "illegal": {
