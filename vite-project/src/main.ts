@@ -5,5 +5,6 @@ let a = document.getElementById("vv")
 let c = document.getElementById("ff")
 if (a && c)
 a.onclick = () => {
-    validateSection(c)
+    let result = validateSection(c)
+    console.log(result)
 }

@@ -40,7 +40,7 @@ export function validateSection(section: Element) {
 }
 
 type errorDescription = {msg: string, proirity: number}
-function validateItem(item: supportedTypes) {
+function validateItem(item: supportedTypes): boolean {
   let success = true;
   let errors: errorDescription[] = [];
   let validations = findValidations(item);
