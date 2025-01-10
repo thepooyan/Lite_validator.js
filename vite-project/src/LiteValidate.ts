@@ -52,7 +52,7 @@ function validateItem(item: supportedTypes) {
       errors.push({msg: valiResult[0], proirity: valiResult[1]})
     };
   }
-  if (success === false) validationFailed(item, errors);
+  reflectValidation(item, errors);
   return success;
 }
 
@@ -79,17 +79,19 @@ function findValidations(item: supportedTypes) {
   return (item.dataset[config.TRIGGER_KEYWORD] || "").trim().split(" ");
 }
 
-function validationFailed(item: supportedTypes,errors: errorDescription[]) {
+function reflectValidation(item: supportedTypes,errors: errorDescription[]) {
   const errorDisplay = findErrorElement(item);
+
+  if (errors.length === 0) {errorDisplay.textContent = ""; return}
 
   let highestPriority = errors.reduce((p, c) => p.proirity < c.proirity ? p : c).proirity;
   let targetErrors = errors.filter(i => i.proirity === highestPriority);
 
   targetErrors.forEach((err, ind) => {
     if (ind === 0)
-    errorDisplay.innerHTML = err.msg
+    errorDisplay.textContent = err.msg
     else
-    errorDisplay.innerHTML += config.CONCATER + err.msg
+    errorDisplay.textContent += config.CONCATER + err.msg
   })
 }
 
