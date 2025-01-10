@@ -1,5 +1,4 @@
 - validate section should return result
-- create config file
 - fix negate msgs
 - "no-error" "no-validation" classname
 - "show" and "hide" classname for error element
