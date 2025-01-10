@@ -43,6 +43,11 @@ const Rules: ValidationRules = {
     errorMessage: "This format is not allowed",
     priority: 2
   },
+  "illegal": {
+    validator: (value, $) => $ ? !new RegExp(`[${$}]`).test(value) : false ,
+    errorMessage: "Please do not use these characters: $",
+    priority: 2
+  },
 };
 
 export default Rules;
