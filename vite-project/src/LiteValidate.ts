@@ -4,6 +4,7 @@ const config = {
   TRIGGER_KEYWORD: "validate",
   ERROR_CLASSNAME: "validation-error",
   SUPPORTED_ELEMENTS: ["input", "textarea", "select"],
+  CONCATER: ", and "
 };
 
 function selectTargetElements() {
@@ -88,7 +89,7 @@ function validationFailed(item: supportedTypes,errors: errorDescription[]) {
     if (ind === 0)
     errorDisplay.innerHTML = err.msg
     else
-    errorDisplay.innerHTML += ", and " + err.msg
+    errorDisplay.innerHTML += config.CONCATER + err.msg
   })
 }
 
