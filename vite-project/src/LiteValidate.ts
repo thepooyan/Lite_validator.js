@@ -79,11 +79,17 @@ function findValidations(item: supportedTypes) {
 }
 
 function validationFailed(item: supportedTypes,errors: errorDescription[]) {
-  console.log(errors, item)
   const errorDisplay = findErrorElement(item);
-  for (const err of errors) {
+
+  let highestPriority = errors.reduce((p, c) => p.proirity < c.proirity ? p : c).proirity;
+  let targetErrors = errors.filter(i => i.proirity === highestPriority);
+
+  targetErrors.forEach((err, ind) => {
+    if (ind === 0)
     errorDisplay.innerHTML = err.msg
-  }
+    else
+    errorDisplay.innerHTML += ", and " + err.msg
+  })
 }
 
 function findErrorElement(item: supportedTypes) {
