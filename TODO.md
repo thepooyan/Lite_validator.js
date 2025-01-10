@@ -3,7 +3,8 @@
 - "no-error" "no-validation" classname
 - "show" and "hide" classname for error element
 - custom msg for pattern 
-- add: (range, filetype checker)
+- add: (filetype checker, select?)
+- if theres no msg box, dont show the error
 
 ```js
 "fileType": {
