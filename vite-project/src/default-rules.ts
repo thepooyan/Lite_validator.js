@@ -27,7 +27,17 @@ const Rules: ValidationRules = {
     validator: (value, $) => $ ? value.length <= parseInt($) : false,
     errorMessage: "This field can't be more than $ characters long",
     priority: 3
-  }
+  },
+  "number": {
+    validator: (value) => /^[0-9]+$/.test(value) ,
+    errorMessage: "This field should be only numbers",
+    priority: 2
+  },
+  "letter": {
+    validator: (value) => /^[a-zA-Z]+$/.test(value) ,
+    errorMessage: "This field should be only alphabet",
+    priority: 2
+  },
 };
 
 export default Rules;
