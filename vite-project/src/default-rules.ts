@@ -1,5 +1,6 @@
-type validatorFunction = (value: string, $?: string) => boolean;
+import config from "./lite-config.ts"
 
+type validatorFunction = (value: string, $?: string) => boolean;
 type ValidationRules = {
   [key: string]: {
     validator: validatorFunction,
@@ -7,11 +8,6 @@ type ValidationRules = {
     priority: number
   }
 };
-const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const PHONE_NUMBER_REGEX = /^[+]?[0-9\s()-]{7,15}$/;
-const PASSWORD_MIN_LENGTH = 9;
-const PASSWORD_SPECIAL_CHAR = /[!@#$%^&*(),.?":{}|<>]/;
-
 
 const Rules: ValidationRules = {
   "required": {
@@ -20,7 +16,7 @@ const Rules: ValidationRules = {
     priority: 1,
   },
   "email": {
-    validator: (value) => EMAIL_REGEX.test(value),
+    validator: (value) => config.EMAIL_REGEX.test(value),
     errorMessage: "Please provide a valid email address.",
     priority: 2,
   },
@@ -45,17 +41,17 @@ const Rules: ValidationRules = {
     priority: 3,
   },
   "phoneNumber": {
-    validator: (value) => PHONE_NUMBER_REGEX.test(value),
+    validator: (value) => config.PHONE_NUMBER_REGEX.test(value),
     errorMessage: "This field must be a valid phone number.",
     priority: 3,
   },
   "passwordStrength": {
     validator: (value) => {
-      const lengthCheck = value.length >= PASSWORD_MIN_LENGTH;
-      const specialCharCheck = PASSWORD_SPECIAL_CHAR.test(value);
+      const lengthCheck = value.length >= config.PASSWORD_MIN_LENGTH;
+      const specialCharCheck = config.PASSWORD_SPECIAL_CHAR.test(value);
       return lengthCheck && specialCharCheck;
     },
-    errorMessage: `This password must be at least ${PASSWORD_MIN_LENGTH} characters long and contain at least one special character.`,
+    errorMessage: `This password must be at least ${config.PASSWORD_MIN_LENGTH} characters long and contain at least one special character.`,
     priority: 3,
   },
   "length": {

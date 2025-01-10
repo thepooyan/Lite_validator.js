@@ -1,11 +1,7 @@
 import rules from "./default-rules.ts";
+import config from "./lite-config.ts"
+
 type supportedTypes = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
-const config = {
-  TRIGGER_KEYWORD: "validate",
-  ERROR_CLASSNAME: "validation-error",
-  SUPPORTED_ELEMENTS: ["input", "textarea", "select"],
-  CONCATER: ", and "
-};
 
 function selectTargetElements() {
   let selection = ``;
