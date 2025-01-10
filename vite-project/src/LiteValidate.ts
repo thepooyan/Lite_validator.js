@@ -58,12 +58,18 @@ function validateItem(item: supportedTypes): boolean {
 
 function executeValidation(validationTag: string, element: supportedTypes): [string, number] {
   if (validationTag === "") return ["", 0]
+  let negate = false;
 
   let base = validationTag;
   let arg: string | undefined;
 
-  if (validationTag.includes("-")) {
-    let split = validationTag.split("-");
+  if (base.substring(0, 1) === "!") {
+    base = base.substring(1);
+    negate = true;
+  }
+
+  if (base.includes("-")) {
+    let split = base.split("-");
     base = split[0];
     arg = split[1];
     if (/^\[.*\]$/.test(arg)) {
@@ -76,6 +82,7 @@ function executeValidation(validationTag: string, element: supportedTypes): [str
   if (rule === undefined) throw new Error(`No rule defined for "${base}".`);
 
   let result = rule.validator(element.value, arg);
+  if (negate === true) result = !result;
   let errorMsg = rule.errorMessage;
   if (arg !== undefined) {
     errorMsg = errorMsg.replace("$", arg)
