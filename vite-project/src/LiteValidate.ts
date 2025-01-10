@@ -71,7 +71,11 @@ function executeValidation(validationTag: string, element: supportedTypes): [str
   if (rule === undefined) throw new Error(`No rule defined for "${base}".`);
 
   let result = rule.validator(element.value, arg);
-  if (result === false) return [rule.errorMessage, rule.priority]
+  let errorMsg = rule.errorMessage;
+  if (arg !== undefined) {
+    errorMsg = errorMsg.replace("$", arg)
+  }
+  if (result === false) return [errorMsg, rule.priority]
   return ["", 0]
 }
 
