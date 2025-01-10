@@ -38,6 +38,11 @@ const Rules: ValidationRules = {
     errorMessage: "This field should be only alphabet",
     priority: 2
   },
+  "pattern": {
+    validator: (value, $) => $ ? new RegExp($).test(value) : false ,
+    errorMessage: "This format is not allowed",
+    priority: 2
+  },
 };
 
 export default Rules;

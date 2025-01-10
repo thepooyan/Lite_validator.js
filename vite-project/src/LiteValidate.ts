@@ -57,6 +57,8 @@ function validateItem(item: supportedTypes): boolean {
 }
 
 function executeValidation(validationTag: string, element: supportedTypes): [string, number] {
+  if (validationTag === "") return ["", 0]
+
   let base = validationTag;
   let arg: string | undefined;
 
@@ -64,6 +66,9 @@ function executeValidation(validationTag: string, element: supportedTypes): [str
     let split = validationTag.split("-");
     base = split[0];
     arg = split[1];
+    if (/^\[.*\]$/.test(arg)) {
+      arg = arg.substring(1, arg.length-1)
+    }
     if (base === "" || arg === "") throw new Error(`Deformed validation tag: ${validationTag}`)
   }
 
